@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
 def charger_donnees():
     df = pd.read_csv("data/bitcoin.csv")
@@ -16,8 +16,8 @@ def entrainer_modeles(df):
     X = df[["Jour"]]
     y = df["Prix (€)"]
 
-    scaler_X = MinMaxScaler()
-    scaler_y = MinMaxScaler()
+    scaler_X = StandardScaler()
+    scaler_y = StandardScaler()
 
     X_scaled = scaler_X.fit_transform(X)
     y_scaled = scaler_y.fit_transform(y.values.reshape(-1, 1)).ravel()
@@ -72,7 +72,7 @@ def predire_prix(resultats, df, jours_suivants=7):
 
 if __name__ == "__main__":
     df = charger_donnees()
-    print(f"{len(df)} jours chargés \n")
+    print(f"{len(df)} jours chargés\n")
 
     resultats = entrainer_modeles(df)
 

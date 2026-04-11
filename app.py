@@ -10,31 +10,40 @@ st.set_page_config(
     layout="wide"
 )
 
+@st.cache_data(ttl=300)
+def charger_prix_bitcoin():
+    return get_prix_bitcoin()
+
+@st.cache_data(ttl=300)
+def charger_historique():
+    historique = get_historique_bitcoin()
+    if historique:
+        sauvegarder_donnees(historique)
+    return historique
+
 st.title("₿ Crypto Dashboard - Bitcoin")
 st.markdown("Analyse de tendances et prédiction du prix du Bitcoin")
 
-# ---- SIDEBAR -l---
+# ---- SIDEBAR ----
 st.sidebar.title("Paramètres")
 jours_prediction = st.sidebar.slider("Jours de prédiction", 3, 30, 7)
 rafraichir = st.sidebar.button("Rafraîchir les données")
 
 # ---- RÉCUPÉRATION DES DONNÉES ----
 if rafraichir:
+    st.cache_data.clear()
     with st.spinner("Récupération des données..."):
         historique = get_historique_bitcoin()
         if historique:
             sauvegarder_donnees(historique)
-            st.success("Données mises à jour ✅")
+            st.success("Données mises à jour ")
         else:
-            st.warning(" Limite API atteinte, les données existantes sont conservées.")
-
-
-
+            st.warning(" Limite API atteinte, données existantes conservées.")
 
 # ---- PRIX EN TEMPS RÉEL ----
 st.subheader("Prix en temps réel")
 
-prix_actuel = get_prix_bitcoin()
+prix_actuel = charger_prix_bitcoin()
 
 col1, col2, col3, col4 = st.columns(4)
 
