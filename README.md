@@ -128,8 +128,8 @@ Le MAE mesure l'erreur moyenne de prédiction par jour :
 
 ## Limitations
 - Les prédictions sont **indicatives** et non des conseils financiers
-- L'API CoinGecko gratuite est limitée à **10-30 appels par minute**
-  (un cache de 5 minutes est mis en place pour éviter les blocages)
+- L'API CoinGecko gratuite est limitée et ne permet pas plus de 4 appels par minute
+  (un cache de 5 minutes est mis en place pour éviter les blocages). Sinon au delà, les métriques donnent "0" à cause du site qui limite les plusieurs appels en même temps. Il faudra attrendre quelques minutes, entre 5 à 10 minutes pour avoir les données actualisées. 
 - Les prédictions au-delà de **7 jours** sont moins fiables car les modèles
   sont entraînés sur seulement 31 jours de données
 - Les modèles simples ne capturent pas les événements imprévisibles du marché
