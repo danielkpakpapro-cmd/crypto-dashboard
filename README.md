@@ -142,8 +142,9 @@ Le MAE mesure l'erreur moyenne de prédiction par jour :
 - Déployer sur Streamlit Cloud pour un accès en ligne gratuit
 
 ## Auteurs
-- **Daniel** — [danielkpakpapro-cmd](https://github.com/danielkpakpapro-cmd)
-- **Binôme** — [GitHub](https://github.com/BINOME_USERNAME)
+-## Auteurs
+- **KPAKPA Daniel** — [danielkpakpapro-cmd](https://github.com/danielkpakpapro-cmd)
+- **Axel MONTRIEUX**
 
 ## Contexte
 Projet réalisé dans le cadre du cours de Python — 2026
