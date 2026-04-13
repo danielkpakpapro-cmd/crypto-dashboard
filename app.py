@@ -21,11 +21,11 @@ st.set_page_config(
     layout="wide"
 )
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=300)
 def charger_prix_bitcoin():
     return get_prix_bitcoin()
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=300)
 def charger_historique():
     historique = get_historique_bitcoin()
     if historique:
