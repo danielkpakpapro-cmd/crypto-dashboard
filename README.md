@@ -3,11 +3,12 @@
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.0+-red)
 ![Scikit-learn](https://img.shields.io/badge/Scikit--learn-1.0+-orange)
+![CoinGecko](https://img.shields.io/badge/API-CoinGecko-green)
 
 ## Description
 Dashboard interactif de suivi et de prédiction du prix du Bitcoin.  
-Les données sont récupérées en temps réel via l'API CoinGecko et analysées 
-par 3 modèles de Machine Learning différents.
+Les données sont récupérées en temps réel via l'API CoinGecko (gratuite, sans clé API)  
+et analysées par 3 modèles de Machine Learning différents.
 
 ## Fonctionnalités
 - Prix Bitcoin en temps réel (cours, variation 24h, volume, market cap)
@@ -16,28 +17,29 @@ par 3 modèles de Machine Learning différents.
   - Linear Regression
   - Random Forest
   - SVR (Support Vector Regression)
-- Export des données en CSV et Excel
-- Prédiction ajustable de 3 à 30 jours
+- Export automatique des données en CSV et Excel
+- Prédiction ajustable de 3 à 30 jours via un slider
+- Lancement en un clic sans passer par un terminal (Windows)
 
 ## Technologies utilisées
-- Python 3.10+
-- Streamlit — interface web interactive
-- Scikit-learn — modèles de Machine Learning
-- Plotly — graphiques interactifs
-- Pandas — manipulation des données
-- CoinGecko API — données crypto en temps réel
+- **Python 3.10+**
+- **Streamlit** — interface web interactive
+- **Scikit-learn** — modèles de Machine Learning
+- **Plotly** — graphiques interactifs
+- **Pandas** — manipulation et export des données
+- **CoinGecko API** — données crypto en temps réel
 
 ## Installation
 
 ### 1. Cloner le projet
 ```bash
-git clone https://github.com/VOTRE_USERNAME/crypto-dashboard.git
+git clone https://github.com/danielkpakpapro-cmd/crypto-dashboard.git
 cd crypto-dashboard
 ```
 
 ### 2. Créer et activer l'environnement virtuel
 ```bash
-# Windows
+# Windows (PowerShell)
 python -m venv venv
 .\venv\Scripts\activate
 
@@ -45,6 +47,11 @@ python -m venv venv
 python -m venv venv
 source venv/bin/activate
 ```
+
+> **Note Windows** : si PowerShell bloque l'activation, exécutez d'abord :
+> ```powershell
+> Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+> ```
 
 ### 3. Installer les dépendances
 ```bash
@@ -56,7 +63,41 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+### 5. Lancement en un clic (Windows uniquement)
+Double-cliquez sur `lancer.vbs` — Streamlit se lance en arrière-plan  
+et le navigateur s'ouvre automatiquement sur le dashboard.
+
 ## Structure du projet
+
+## Comment ça marche
+
+### 1. Récupération des données
+Le fichier `scraper/coingecko.py` interroge l'API CoinGecko pour récupérer :
+- Le prix actuel du Bitcoin en euros
+- L'historique des 30 derniers jours
+- La variation 24h, le volume et la market cap
+
+Les données sont automatiquement sauvegardées en **CSV** et **Excel**  
+dans le dossier `data/`.
+
+### 2. Modèles de prédiction
+Le fichier `model/prediction.py` entraîne 3 modèles sur l'historique :
+
+| Modèle | Comportement | Points forts |
+|---|---|---|
+| Linear Regression | Tendance en ligne droite | Simple, rapide, interprétable |
+| Random Forest | Moyenne de plusieurs arbres de décision | Stable, robuste |
+| SVR | Détecte des courbes complexes | Plus précis sur données non linéaires |
+
+Les données sont normalisées avec un **StandardScaler** pour que les modèles  
+gèrent correctement l'extrapolation au-delà des données connues.
+
+### 3. Dashboard Streamlit
+Le fichier `app.py` affiche :
+- Les métriques temps réel
+- Le graphique historique interactif
+- Les prédictions des 3 modèles sur N jours
+- Le tableau comparatif des MAE
 
 ## Interprétation des résultats
 
@@ -68,9 +109,9 @@ streamlit run app.py
 
 ### Historique 30 jours
 La courbe orange montre l'évolution réelle du prix :
-- Les pics correspondent aux moments de forte hausse
-- Les creux correspondent aux périodes de baisse
-- La tendance générale indique la direction du marché
+- Les **pics** correspondent aux moments de forte hausse
+- Les **creux** correspondent aux périodes de baisse
+- La **tendance générale** indique la direction du marché
 
 ### MAE (Mean Absolute Error)
 Le MAE mesure l'erreur moyenne de prédiction par jour :
@@ -78,6 +119,24 @@ Le MAE mesure l'erreur moyenne de prédiction par jour :
 - MAE entre 1 000 € et 3 000 € → acceptable pour la crypto
 - MAE > 5 000 € → modèle trop imprécis
 
-### Limitations
-Aucun modèle ne peut prédire la crypto à 100%.  
-Ces prédictions sont des tendances indicatives, pas des conseils financiers.
+## Limitations
+- Les prédictions sont **indicatives** et non des conseils financiers
+- L'API CoinGecko gratuite est limitée à **10-30 appels par minute**  
+  (un cache de 5 minutes est mis en place pour éviter les blocages)
+- Les prédictions au-delà de **7 jours** sont moins fiables —  
+  les modèles sont entraînés sur seulement 31 jours de données
+- Les modèles simples ne capturent pas les événements imprévisibles du marché  
+  (actualités, régulations, tweets influents...)
+
+## Pistes d'amélioration
+- Ajouter d'autres cryptomonnaies (Ethereum, BNB, Solana...)
+- Intégrer un graphique en chandelier (candlestick)
+- Utiliser un modèle LSTM (réseau neuronal) pour de meilleures prédictions
+- Déployer sur Streamlit Cloud pour un accès en ligne gratuit
+
+## Auteurs
+- **Daniel** — [danielkpakpapro-cmd](https://github.com/danielkpakpapro-cmd)
+- **Binôme** — [GitHub](https://github.com/BINOME_USERNAME)
+
+## Contexte
+Projet réalisé dans le cadre du cours de Python — 2026
