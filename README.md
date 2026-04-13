@@ -6,8 +6,8 @@
 ![CoinGecko](https://img.shields.io/badge/API-CoinGecko-green)
 
 ## Description
-Dashboard interactif de suivi et de prédiction du prix du Bitcoin.  
-Les données sont récupérées en temps réel via l'API CoinGecko (gratuite, sans clé API)  
+Dashboard interactif de suivi et de prédiction du prix du Bitcoin.
+Les données sont récupérées en temps réel via l'API CoinGecko (gratuite, sans clé API)
 et analysées par 3 modèles de Machine Learning différents.
 
 ## Fonctionnalités
@@ -19,17 +19,14 @@ et analysées par 3 modèles de Machine Learning différents.
   - SVR (Support Vector Regression)
 - Export automatique des données en CSV et Excel
 - Prédiction ajustable de 3 à 30 jours via un slider
-- Lancement en un clic sans passer par un terminal (Windows)
+- Génération automatique des données au premier lancement
 
-## Technologies utilisées
-- **Python 3.10+**
-- **Streamlit** — interface web interactive
-- **Scikit-learn** — modèles de Machine Learning
-- **Plotly** — graphiques interactifs
-- **Pandas** — manipulation et export des données
-- **CoinGecko API** — données crypto en temps réel
+## Prérequis
+Avant de commencer, assurez-vous d'avoir installé :
+- [Python 3.10+](https://www.python.org/downloads/) — cochez "Add Python to PATH" lors de l'installation
+- [Git](https://git-scm.com/downloads)
 
-## Installation
+## Installation et lancement
 
 ### 1. Cloner le projet
 ```bash
@@ -37,35 +34,45 @@ git clone https://github.com/danielkpakpapro-cmd/crypto-dashboard.git
 cd crypto-dashboard
 ```
 
-### 2. Créer et activer l'environnement virtuel
+### 2. Créer l'environnement virtuel
 ```bash
 # Windows (PowerShell)
 python -m venv venv
+
+# macOS / Linux
+python3 -m venv venv
+```
+
+### 3. Activer l'environnement virtuel
+```bash
+# Windows (PowerShell)
 .\venv\Scripts\activate
 
 # macOS / Linux
-python -m venv venv
 source venv/bin/activate
 ```
 
-> **Note Windows** : si PowerShell bloque l'activation, exécutez d'abord :
+> **Problème sur Windows ?** Si PowerShell bloque l'activation, exécutez d'abord :
 > ```powershell
 > Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 > ```
+> Puis relancez l'activation.
 
-### 3. Installer les dépendances
+### 4. Installer les dépendances
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Lancer le dashboard
+### 5. Lancer le dashboard
 ```bash
 streamlit run app.py
 ```
 
-### 5. Lancement en un clic (Windows uniquement)
-Double-cliquez sur `lancer.vbs` — Streamlit se lance en arrière-plan  
-et le navigateur s'ouvre automatiquement sur le dashboard.
+Le dashboard s'ouvre automatiquement dans votre navigateur.  
+**Les données sont récupérées automatiquement au premier lancement.**
+
+> **Note** : une connexion internet est nécessaire pour récupérer
+> les données via l'API CoinGecko.
 
 ## Structure du projet
 
@@ -77,7 +84,7 @@ Le fichier `scraper/coingecko.py` interroge l'API CoinGecko pour récupérer :
 - L'historique des 30 derniers jours
 - La variation 24h, le volume et la market cap
 
-Les données sont automatiquement sauvegardées en **CSV** et **Excel**  
+Les données sont automatiquement sauvegardées en **CSV** et **Excel**
 dans le dossier `data/`.
 
 ### 2. Modèles de prédiction
@@ -89,14 +96,14 @@ Le fichier `model/prediction.py` entraîne 3 modèles sur l'historique :
 | Random Forest | Moyenne de plusieurs arbres de décision | Stable, robuste |
 | SVR | Détecte des courbes complexes | Plus précis sur données non linéaires |
 
-Les données sont normalisées avec un **StandardScaler** pour que les modèles  
+Les données sont normalisées avec un **StandardScaler** pour que les modèles
 gèrent correctement l'extrapolation au-delà des données connues.
 
 ### 3. Dashboard Streamlit
 Le fichier `app.py` affiche :
 - Les métriques temps réel
 - Le graphique historique interactif
-- Les prédictions des 3 modèles sur N jours
+- Les prédictions des 3 modèles sur N jours (ajustable via le slider)
 - Le tableau comparatif des MAE
 
 ## Interprétation des résultats
@@ -121,11 +128,11 @@ Le MAE mesure l'erreur moyenne de prédiction par jour :
 
 ## Limitations
 - Les prédictions sont **indicatives** et non des conseils financiers
-- L'API CoinGecko gratuite est limitée à **10-30 appels par minute**  
+- L'API CoinGecko gratuite est limitée à **10-30 appels par minute**
   (un cache de 5 minutes est mis en place pour éviter les blocages)
-- Les prédictions au-delà de **7 jours** sont moins fiables —  
-  les modèles sont entraînés sur seulement 31 jours de données
-- Les modèles simples ne capturent pas les événements imprévisibles du marché  
+- Les prédictions au-delà de **7 jours** sont moins fiables car les modèles
+  sont entraînés sur seulement 31 jours de données
+- Les modèles simples ne capturent pas les événements imprévisibles du marché
   (actualités, régulations, tweets influents...)
 
 ## Pistes d'amélioration

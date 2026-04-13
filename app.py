@@ -1,8 +1,19 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import os
 from scraper.coingecko import get_prix_bitcoin, get_historique_bitcoin, sauvegarder_donnees
 from model.prediction import charger_donnees, entrainer_modeles, predire_prix
+
+# Génération automatique des données si elles n'existent pas
+if not os.path.exists("data/bitcoin.csv"):
+    with st.spinner("Première utilisation : récupération des données..."):
+        historique = get_historique_bitcoin()
+        if historique:
+            sauvegarder_donnees(historique)
+        else:
+            st.error("Impossible de récupérer les données. Vérifiez votre connexion.")
+            st.stop()
 
 st.set_page_config(
     page_title="Crypto Dashboard",
@@ -36,9 +47,9 @@ if rafraichir:
         historique = get_historique_bitcoin()
         if historique:
             sauvegarder_donnees(historique)
-            st.success("Données mises à jour ")
+            st.success("Données mises à jour")
         else:
-            st.warning(" Limite API atteinte, données existantes conservées.")
+            st.warning("Limite API atteinte, données existantes conservées.")
 
 # ---- PRIX EN TEMPS RÉEL ----
 st.subheader("Prix en temps réel")
