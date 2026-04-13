@@ -79,7 +79,7 @@ def get_historique_bitcoin():
             prix = item[1]
             historique.append({"Date": date, "Prix (€)": prix})
         
-        print(f"{len(historique)} jours récupérés ✅")
+        print(f"{len(historique)} jours récupérés")
         return historique
     
     except Exception as e:
@@ -92,10 +92,10 @@ def sauvegarder_donnees(historique):
     
     df = pd.DataFrame(historique)
     df.to_csv("data/bitcoin.csv", index=False)
-    print("Fichier CSV sauvegardé ✅")
+    print("Fichier CSV sauvegardé")
     
     df.to_excel("data/bitcoin.xlsx", index=False)
-    print("Fichier Excel sauvegardé ✅")
+    print("Fichier Excel sauvegardé")
     
     return df
 
