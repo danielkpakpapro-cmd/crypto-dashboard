@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from datetime import datetime, timedelta          # ✅ ajout
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
@@ -9,6 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 def charger_donnees():
     df = pd.read_csv("data/bitcoin.csv")
+    df["Date"] = pd.to_datetime(df["Date"], format="%d/%m/%Y")  # ← ligne ajoutée
     df["Jour"] = range(len(df))
     return df
 
@@ -53,12 +55,20 @@ def entrainer_modeles(df):
     return resultats
 
 def predire_prix(resultats, df, jours_suivants=7):
+    from datetime import datetime, timedelta  # ← ajoute cet import
+
     dernier_jour = df["Jour"].max()
     jours_futurs = np.array(
         range(dernier_jour + 1, dernier_jour + 1 + jours_suivants)
     ).reshape(-1, 1)
 
-    predictions = {"Jour": [f"J+{i+1}" for i in range(jours_suivants)]}
+    # ✅ Vraies dates futures
+    derniere_date = df["Date"].max()
+    dates_futures = [
+        (derniere_date + timedelta(days=i+1)).strftime("%d/%m/%Y")
+        for i in range(jours_suivants)
+    ]
+    predictions = {"Jour": dates_futures}
 
     for nom, res in resultats.items():
         X_futur_scaled = res["scaler_X"].transform(jours_futurs)
